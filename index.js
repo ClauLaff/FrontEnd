@@ -1,10 +1,15 @@
 import {creerFiltres} from "./filtres.js";
 
-/**Récupération des travaux depuis l'API*/
+afficherTousTravaux();
+creerFiltres();
+
+/**Importation des travaux depuis l'API*/
 export async function importerTravaux(){
-        const reponse = await fetch("http://localhost:5678/api/works");
-        return reponse;
-    }
+    const reponse = await fetch("http://localhost:5678/api/works");
+    return reponse;
+}
+
+/**Importation depuis l'API et affichage de tous les travaux*/
 export async function afficherTousTravaux(){ 
     const reponse = await importerTravaux();
     const travaux = await reponse.json();
@@ -14,5 +19,3 @@ export async function afficherTousTravaux(){
     }
  }
 
-afficherTousTravaux();
-creerFiltres();

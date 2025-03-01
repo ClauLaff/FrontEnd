@@ -1,7 +1,7 @@
 import {afficherTousTravaux, importerTravaux}from "./index.js";
 
 
-/**Création et activation des filtres à partir de la liste des catégories importée par l'API */
+/**Création et activation des filtres à partir des catégories importées depuis l'API*/
 export async function creerFiltres(){
     /**importation des catégories*/
     const reponse = await fetch ("http://localhost:5678/api/categories");
@@ -27,10 +27,12 @@ export async function creerFiltres(){
         });
     }
  }
+
  function effacerGalerie(){
      const galerie = document.getElementById("galerie");
      galerie.innerHTML="";
  }
+ 
  async function afficherTravauxFiltres(id){
     const reponse = await importerTravaux();
     const travaux = await reponse.json();
