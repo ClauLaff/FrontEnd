@@ -12,13 +12,14 @@
 	<script type="module" src="index.js" defer></script>
 </head>
 <body>
+	<div id="bandeauEdition" class="invisible"><img src="assets/icons/edition(blanc).png" alt="edition" title="edition">Mode édition</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
-			<li><strong>projets</strong></li>
+			<li>projets</li>
 			<li>contact</li>
-			<li><a href=login.html>login</a></li>
+			<li ><button id="logInOut" href=login.html>login</button></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -36,7 +37,7 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<header><h2>Mes Projets</h2><button id="modifier"class="invisible"><img src="assets/icons/edition(noir).png" alt="edition">modifier</button></header>
 		<div id="barreFiltres"></div>
 		<div id="galerie" class="gallery"></div>
 	</section>

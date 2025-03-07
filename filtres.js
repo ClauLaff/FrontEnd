@@ -1,6 +1,5 @@
 import {afficherTousTravaux, importerTravaux}from "./index.js";
 
-
 /**Création et activation des filtres à partir des catégories importées depuis l'API*/
 export async function creerFiltres(){
     /**importation des catégories*/
@@ -26,6 +25,19 @@ export async function creerFiltres(){
             }
         });
     }
+    /**affiche conditionné des filtres en fonction de la connexion*/
+    const token = localStorage.getItem("1");
+    if(token !== null){
+        const filtres = document.querySelectorAll(".filter");
+        for (let i=0; i<filtres.length; i++){
+            filtres[i].classList.add("invisible");
+    }
+    }else{
+        const filtres = document.querySelectorAll(".filter");
+        for (let i=0; i<filtres.length; i++){
+            filtres[i].classList.remove("invisible");
+        }
+    }
  }
 
  function effacerGalerie(){
@@ -34,8 +46,7 @@ export async function creerFiltres(){
  }
  
  async function afficherTravauxFiltres(id){
-    const reponse = await importerTravaux();
-    const travaux = await reponse.json();
+    const travaux = await importerTravaux();
     const travauxFiltres = travaux.filter(function(work){
         return work.categoryId==id;
     });
