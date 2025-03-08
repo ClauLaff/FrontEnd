@@ -8,8 +8,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
-	<link rel="stylesheet" href="./assets/style.css">
-	<script type="module" src="index.js" defer></script>
+	<link rel="stylesheet" href="./assets/style.css">	
 </head>
 <body>
 	<div id="bandeauEdition" class="invisible"><img src="assets/icons/edition(blanc).png" alt="edition" title="edition">Mode édition</div>
@@ -19,13 +18,13 @@
 		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li ><button id="logInOut" href=login.html>login</button></li>
+			<li ><a id="logInOut" href=login.html>login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
 </header>
 <main>
-	<section id="introduction">
+	<div id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">
 		</figure>
@@ -35,9 +34,9 @@
 			<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
-	</section>
+	</div>
 	<section id="portfolio">
-		<header><h2>Mes Projets</h2><button id="modifier"class="invisible"><img src="assets/icons/edition(noir).png" alt="edition">modifier</button></header>
+		<header><h2>Mes Projets</h2><a href="#" id="modifier" class="invisible"><img src="assets/icons/edition(noir).png" alt="edition">modifier</a></header>
 		<div id="barreFiltres"></div>
 		<div id="galerie" class="gallery"></div>
 	</section>
@@ -55,7 +54,6 @@
 		</form>
 	</section>
 </main>
-
 <footer>
 	<nav>
 		<ul>
@@ -63,5 +61,6 @@
 		</ul>
 	</nav>
 </footer>
+<script type="module" src="index.js"></script>
 </body>
 </html>

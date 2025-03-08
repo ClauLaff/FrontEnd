@@ -25,15 +25,15 @@ function gererAffichageModeEdition(){
     if(token !== null){
         const bandeau = document.getElementById("bandeauEdition");
         bandeau.classList.remove("invisible");
-        const log = document.getElementById("logInOut");
-        log.innerText="logout";
+        const logInOut = document.getElementById("logInOut");
+        logInOut.innerText="logout";
         const modifier = document.getElementById("modifier");
         modifier.classList.remove("invisible");
     }else{
         const bandeau = document.getElementById("bandeauEdition");
         bandeau.classList.add("invisible");
-        const log = document.getElementById("logInOut");
-        log.innerText = "login";
+        const logInOut = document.getElementById("logInOut");
+        logInOut.innerText = "login";
         const modifier = document.getElementById("modifier");
         modifier.classList.add("invisible");
         const filtres = document.getElementById("barreFiltres");
