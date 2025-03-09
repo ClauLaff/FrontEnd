@@ -1,13 +1,14 @@
 import {creerFiltres} from "./filtres.js";
-import { activerModal} from "./modale.js";
+import { creerModal} from "./modale.js";
 
 afficherTousTravaux();
 creerFiltres();
 gererAffichageModeEdition();
 activerLogInOut();
-activerModal();
+creerModal();
 
-/**Importation depuis l'API et affichage de tous les travaux*/
+
+/**Importation depuis l'API et affichage de tous les travaux dans la galerie et dans la galerie modale*/
 export async function afficherTousTravaux(){ 
     const travaux = await importerTravaux();
     const galerie = document.getElementById("galerie");
@@ -16,9 +17,11 @@ export async function afficherTousTravaux(){
     }
     const galerieModale = document.getElementById("galerieModale");
     for(let i=0; i<travaux.length;i++){
-        galerieModale.innerHTML+=`<figure><img src="${travaux[i].imageUrl}" alt="${travaux[i].title}"><button class="bin" data-id="${travaux[i].id}"><img src="assets/icons/bin.png"></button></figure>`;
+        galerieModale.innerHTML+=`<figure><img src="${travaux[i].imageUrl}" alt="${travaux[i].title}"><input type="image" src="assets/icons/bin.png" alt ="supprimer" class="bin js-modal-stop" data-id="${travaux[i].id}"></input></figure>`;
     }
+    activerBoutonsSuppression();
  }
+
 /**Importation des travaux depuis l'API*/
 export async function importerTravaux(){
     const reponse = await fetch("http://localhost:5678/api/works");
@@ -46,7 +49,7 @@ function gererAffichageModeEdition(){
         filtres.classList.remove("invisible");
     }
  }
-
+/**Login envoie vers la page de login, logout efface le token en mémoire et recharge la page d'accueil*/
  function activerLogInOut(){
     const logInOut = document.getElementById("logInOut");
     logInOut.addEventListener("click",function(){
@@ -58,3 +61,21 @@ function gererAffichageModeEdition(){
         }
     })
  }
+
+ function activerBoutonsSuppression(){
+ const boutonsSuppression = document.querySelectorAll(".bin");
+    for(let i=0;i<boutonsSuppression.length;i++){
+        boutonsSuppression[i].addEventListener("click", async function(e){
+            const id = e.target.dataset.id;
+            const token = localStorage.getItem("1");
+            const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
+                method:"DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type":"application/json"
+                }
+            })
+        })
+    }
+}
+

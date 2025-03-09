@@ -335,6 +335,10 @@ input[type="submit"]{
 	border:none;
 	align-self: flex-end;
 }
+.js-close-modal:hover{
+	border:1px solid black;
+}
+
 #title-modal{
 	font-family: "Work Sans" ;
 	font-weight: 400;
