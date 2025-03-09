@@ -256,20 +256,21 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+
+/** Page login*/
 #login a{
 	text-align: center;
 	text-decoration: underline;
 }
-
-
 #login .undefined{
 	border: 1px solid red;
 }
-
 #message-connexion{
 	height:25px;
 	color:red;
 }
+
+/** Mode édition*/
 
 #bandeauEdition{
 	background-color: black;
@@ -296,7 +297,9 @@ input[type="submit"]{
 .invisible{
 	display:none;
 }
+
 /**Modale*/
+
 #modal-body{
 	margin:0;
 	padding:0;
@@ -313,12 +316,62 @@ input[type="submit"]{
 	background:rgba(0, 0, 0, 0.5);
 }
 .modal-wrapper{
+	display:flex;
+	flex-direction: column;
 	background-color: white;
-	width:500px;
+	width:45%;
 	padding:20px;
 	max-width:calc(100vh-20px);
-	max-height:calc(100vh-20px);
+	max-height:calc(95vh-20px);
 	overflow:auto;
+	border-radius: 10px;
+	text-align: center;
+	align-items: center;
+}
+.js-close-modal{
+	width:24px;
+	height:24px;
+	background-color: white;
+	border:none;
+	align-self: flex-end;
+}
+#title-modal{
+	font-family: "Work Sans" ;
+	font-weight: 400;
+	font-size: 26px;
+	padding:10px;
 }
 
+#ajouterPhoto{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin : 2em auto ;
+	width: 237px;
+	text-align: center;
+	border-radius: 60px ;
+	padding:10px;
+	border:none;
+}
+.modalGallery{
+	width: 75%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 10px;
+	grid-row-gap: 5px;
+	border-bottom: 1px solid #B3B3B3;
+	padding:20px;
+}
+.modalGallery img {
+	width: 100%;
+}
 
+.bin{
+	position:relative;
+	top:-80%;
+	left:30%;
+	background-color: transparent;
+	border-radius: 4px;
+	border:none;
+}

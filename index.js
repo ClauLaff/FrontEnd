@@ -1,9 +1,11 @@
 import {creerFiltres} from "./filtres.js";
+import { activerModal} from "./modale.js";
 
 afficherTousTravaux();
 creerFiltres();
 gererAffichageModeEdition();
 activerLogInOut();
+activerModal();
 
 /**Importation depuis l'API et affichage de tous les travaux*/
 export async function afficherTousTravaux(){ 
@@ -11,6 +13,10 @@ export async function afficherTousTravaux(){
     const galerie = document.getElementById("galerie");
     for(let i=0; i<travaux.length;i++){
         galerie.innerHTML+=`<figure><img src="${travaux[i].imageUrl}" alt="${travaux[i].title}"><figcaption>${travaux[i].title}</figcaption></figure>`;
+    }
+    const galerieModale = document.getElementById("galerieModale");
+    for(let i=0; i<travaux.length;i++){
+        galerieModale.innerHTML+=`<figure><img src="${travaux[i].imageUrl}" alt="${travaux[i].title}"><button class="bin" data-id="${travaux[i].id}"><img src="assets/icons/bin.png"></button></figure>`;
     }
  }
 /**Importation des travaux depuis l'API*/

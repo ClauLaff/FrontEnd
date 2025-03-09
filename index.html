@@ -36,7 +36,15 @@
 		</article>
 	</div>
 	<section id="portfolio">
-		<header><h2>Mes Projets</h2><a href="#" id="modifier" class="invisible"><img src="assets/icons/edition(noir).png" alt="edition">modifier</a></header>
+		<header><h2>Mes Projets</h2><a id="modifier" href="#modal"  class="js-modal invisible"><img src="assets/icons/edition(noir).png" alt="edition">modifier</a></header>
+		<aside id="modal" class="modal" style="display:none" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title-modal">
+			<div class="modal-wrapper js-modal-stop">
+				<button class="js-close-modal"><img src="assets/icons/xmark.png" alt="fermer-modale"></button>
+				<h3 id="title-modal">Galerie photo</h3>
+				<div id="galerieModale" class="modalGallery"></div>
+				<button id="ajouterPhoto">Ajouter une photo</button>
+			</div>
+		</aside>
 		<div id="barreFiltres"></div>
 		<div id="galerie" class="gallery"></div>
 	</section>

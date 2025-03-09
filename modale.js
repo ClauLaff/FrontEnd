@@ -59,5 +59,6 @@ window.addEventListener("keydown", function(e){
     }
 })
 
-document.querySelector(".js-modal").addEventListener("click", openModal);
-
+export function activerModal(){
+    document.querySelector(".js-modal").addEventListener("click", openModal);
+}
