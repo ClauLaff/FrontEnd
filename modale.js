@@ -3,6 +3,7 @@ const focusableSelector="button, a, input, textarea";
 let focusables = [];
 let previouslyFocusedElement=null;
 
+
 const openModal = function(e){
     e.preventDefault();
     modal = document.querySelector(e.target.getAttribute("href"));
@@ -59,6 +60,6 @@ window.addEventListener("keydown", function(e){
     }
 })
 
-export function creerModal(){
-    document.querySelector(".js-modal").addEventListener("click", openModal);
+export function creerModale(){
+    document.querySelector(".js-modal").addEventListener("click", openModal)
 }

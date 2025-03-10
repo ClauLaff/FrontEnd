@@ -1,10 +1,16 @@
 import {afficherTousTravaux, importerTravaux}from "./index.js";
 
+const categories = await importerCategories();
+const travaux = await importerTravaux();
+
+/**Importation des catégories depuis l'API, renvoie la liste des catégories */
+async function importerCategories(){
+    const reponse = await fetch ("http://localhost:5678/api/categories");
+    return await reponse.json();
+}
+
 /**Création et activation des filtres à partir des catégories importées depuis l'API*/
 export async function creerFiltres(){
-    /**importation des catégories*/
-    const reponse = await fetch ("http://localhost:5678/api/categories");
-    const categories = await reponse.json();
     /**creation des filtres */
     const barreFiltres = document.getElementById("barreFiltres");
     barreFiltres.innerHTML += `<button data-id=0 class="filter">Tous</button>`;
@@ -25,7 +31,7 @@ export async function creerFiltres(){
             }
         });
     }
-    /**affiche conditionné des filtres en fonction de la connexion*/
+    /**affichage conditionné des filtres en fonction de la connexion*/
     const token = localStorage.getItem("1");
     if(token !== null){
         const filtres = document.querySelectorAll(".filter");
@@ -46,7 +52,6 @@ export async function creerFiltres(){
  }
  
  async function afficherTravauxFiltres(id){
-    const travaux = await importerTravaux();
     const travauxFiltres = travaux.filter(function(work){
         return work.categoryId==id;
     });
