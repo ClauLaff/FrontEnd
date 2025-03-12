@@ -294,9 +294,6 @@ input[type="submit"]{
 	padding-right: 5px;
 }
 
-.invisible{
-	display:none;
-}
 
 /**Modale*/
 
@@ -342,7 +339,7 @@ input[type="submit"]{
 	padding:10px;
 }
 
-#ajouterPhoto{
+#ajouter-photo{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -354,7 +351,7 @@ input[type="submit"]{
 	padding:10px;
 	border:none;
 }
-.modalGallery{
+.modal-Gallery{
 	width: 75%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -363,7 +360,7 @@ input[type="submit"]{
 	border-bottom: 1px solid #B3B3B3;
 	padding:20px;
 }
-.modalGallery img {
+.modal-Gallery img {
 	width: 100%;
 }
 
@@ -374,4 +371,29 @@ input[type="submit"]{
 	background-color: transparent;
 	border-radius: 4px;
 	border:none;
+}
+
+/**Modale*/
+.modal-wrapper form {
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+}
+
+.modal-wrapper form input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+.modal-wrapper label {
+	margin: 2em 0 1em 0;
+}
+.modal-header{
+	display:flex;
+	width:100%;
+	justify-content: space-between;
+}
+.invisible{
+	display:none;
 }

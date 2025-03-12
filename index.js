@@ -1,6 +1,5 @@
 import {creerFiltres} from "./filtres.js";
-import { creerModale} from "./modale.js";
-
+import {creerModale} from "./modal.js";
 
 const travaux = await importerTravaux();
 
@@ -9,8 +8,6 @@ creerFiltres();
 gererAffichageModeEdition();
 activerLogInOut();
 creerModale();
-afficherGalerieModale();
-
 
 /**Importation des travaux depuis l'API, retourne la liste des travaux*/
 export async function importerTravaux(){
@@ -60,41 +57,3 @@ function gererAffichageModeEdition(){
         }
     })
  }
-
- /** Modale */
-
-/**Crée les éléments html de la modale */
-function creerElementsModale(){
-    const modalWrapper = document.getElementById("modal-wrapper");
-    modalWrapper.innerHTML = 
-        `<input type="image" src="assets/icons/xmark.png" alt="fermer-modale" class="js-close-modal"></input>
-            <h3 id="title-modal">Galerie photo</h3>
-            <div id="galerieModale" class="modalGallery"></div>
-            <button id="ajouterPhoto">Ajouter une photo</button>`;
-}
-/**Le click sur les boutons de suppression déclenche la suppression des travaux dans l'API*/
-function activerBoutonsSuppression(){
-const boutonsSuppression = document.querySelectorAll(".bin");
-    for(let i=0;i<boutonsSuppression.length;i++){
-        boutonsSuppression[i].addEventListener("click", async function(e){
-            const id = e.target.dataset.id;
-            const token = localStorage.getItem("1");
-            const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
-                method:"DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type":"application/json"
-                }
-            })
-        })
-    }
-}
-/**Affiche les travaux dans la modale et active les boutons de suppression */
-function afficherGalerieModale(){
-    creerElementsModale();
-    const galerieModale = document.getElementById("galerieModale");
-    for(let i=0; i<travaux.length;i++){
-        galerieModale.innerHTML+=`<figure><img src="${travaux[i].imageUrl}" alt="${travaux[i].title}"><input type="image" src="assets/icons/bin.png" alt ="supprimer" class="bin js-modal-stop" data-id="${travaux[i].id}"></input></figure>`;
-    }
-    activerBoutonsSuppression();
-}
