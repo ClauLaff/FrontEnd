@@ -5,9 +5,14 @@ let vue = null;
 const focusableSelector="button, a, input, textarea";
 let focusables = [];
 const travaux = await importerTravaux();
+const categories = await importerCategories();
 
 async function importerTravaux(){
     const reponse = await fetch("http://localhost:5678/api/works");
+    return await reponse.json();
+}
+async function importerCategories(){
+    const reponse = await fetch ("http://localhost:5678/api/categories");
     return await reponse.json();
 }
 
@@ -49,10 +54,14 @@ function afficherVue1(){
     const wrapper = document.getElementById("modal-wrapper");
     wrapper.innerHTML=
         `<div id="vue1">
-            <input type="image" src="assets/icons/xmark.png" alt="fermer-modale" class="js-close-modal">
+            <div class="modal-header">
+                <input type="image" src="assets/icons/xmark.png" alt="fermer-modale" class="js-close-modal">
+            </div>
             <h3 id="title-modal">Galerie photo</h3>
             <div id="galerie-modale" class="modal-Gallery"></div>
-            <button  id="ajouter-photo" >Ajouter une photo</button>
+            <div class="modal-footer">
+                <button  id="ajouter-photo" >Ajouter une photo</button>
+            </div>
         </div>`
     modal = document.getElementById("modal");
     const galerieModale = modal.querySelector("#galerie-modale");
@@ -119,6 +128,11 @@ const closeModal = function(){
         galerieModale.innerHTML =``;
         desactiverBoutonsSuppresion();
         desactiverBoutonAjouterPhoto();
+    }else{
+        desactiverBoutonRetour();
+        desactiverExplorateur();
+        desactiverVerificationTitre();
+        desactiverVerificationCategorie();
     }
     focusables=[];
     modal.setAttribute("aria-hidden", true);
@@ -146,25 +160,118 @@ function afficherVue2(){
         </div>
         <h3 id = "title-modal" >Ajout photo</h3>
         <form action="#" method="post">
-            <input type="file" id="explorateur" accept="jpg, png">
+            <label for="explorateur" id="zone-ajout-photo">
+                <div>
+                    <div id="informations-ajout-photo">
+                        <img src="assets/icons/jpg.png" alt="jpg">
+                        <label for="explorateur" id="bouton-ajouter-photo">+ Ajouter photo</label>
+                        <p>jpg, png : 4mo max</p>
+                    </div>
+                    <div id="preview">
+                    </div>
+                </div>
+                <input type="file" id="explorateur" accept=".jpg, .png" multiple=false class="invisible">   
+            </label>
             <label for="title">Titre</label>
-            <input type="text" name="title" id="title">
+            <input type="text" name="title" id="title" required=true>
             <label for="category">Catégorie</label>
-            <input type"text" name="category" id="category">
-            <input type="submit" value="Valider">
-        </form>
+            <select name="category" id="category" required=true></select>
+        </form>  
+        <div class="modal-footer">
+            <input type="submit" value="Valider" id="valider" disabled >
+        </div>     
     </div>`
     modal= document.getElementById("modal");
-    modal.classList.remove("invisible");
+    const categorie = modal.querySelector("#category");
+    categorie.innerHTML+=`<option value=""></option>`;
+    for(let i=0; i<categories.length;i++){
+        categorie.innerHTML+=`<option value="${categories[i].name}">${categories[i].name}</option>`;
+    }
+    activerBoutonRetour();
+    activerExplorateur();
+    activerVerificationTitre();
+    activerVerificationCategorie();
     vue2 = modal.querySelector("#vue2");
     vue = vue2;
-    /**activerBoutonValider();*/
+    modal.classList.remove("invisible");
+      /**activerBoutonValider();*/
 }
 
 const affichageVue2 = function(){
     closeModal();
     afficherVue2();
     openModal();
+}
+
+function activerBoutonRetour(){
+    const retour = modal.querySelector("#retour-vue1");
+    retour.addEventListener("click", affichageVue1);
+}
+function desactiverBoutonRetour(){
+    const retour = modal.querySelector("#retour-vue1");
+    retour.removeEventListener("click", affichageVue1);
+}
+const affichagePhoto = function(e){
+    const explorateur = modal.querySelector("#explorateur");
+    const photos = explorateur.files;
+    const informations = modal.querySelector("#informations-ajout-photo");
+    informations.style.display="none";
+    const preview = modal.querySelector("#preview");
+    preview.innerHTML="";
+    const photo = document.createElement("img");
+    photo.classList.add("photo");
+    photo.src = window.URL.createObjectURL(photos[0]); 
+    preview.appendChild(photo);
+    verifierFormulaire(); 
+}
+function activerExplorateur(){
+    const explorateur = modal.querySelector("#explorateur");
+    explorateur.addEventListener("change", affichagePhoto);
+}
+function desactiverExplorateur(){
+    const explorateur = modal.querySelector("#explorateur");
+    explorateur.removeEventListener("change", affichagePhoto);
+}
+function activerVerificationTitre(){
+    const title = modal.querySelector("#title");
+    title.addEventListener("change",function(){
+        verifierFormulaire;
+    })
+}
+function desactiverVerificationTitre(){
+    const title = modal.querySelector("#title");
+    title.removeEventListener("change",function(){
+        verifierFormulaire;
+    })
+}
+function activerVerificationCategorie(){
+    const category = modal.querySelector("#category");
+    category.addEventListener("change",function(){
+        verifierFormulaire();
+    })
+}
+function desactiverVerificationCategorie(){
+    const category = modal.querySelector("#category");
+    category.removeEventListener("change",function(){
+        verifierFormulaire();
+    })
+}
+function verifierFormulaire(){
+    const explorateur = modal.querySelector("#explorateur");
+    const photos = explorateur.files;
+    const title = modal.querySelector("#title");
+    const titre = title.value;
+    const category = modal.querySelector("#category");
+    const categorie = category.value;
+    if ( photos.length !== 0 && titre !== "" && categorie !== ""){
+       const valider = modal.querySelector("#valider");
+        valider.style.backgroundColor="#1D6154";
+        valider.setAttribute("disabled",false); 
+    }else{
+        const valider = modal.querySelector("#valider");
+        valider.style.backgroundColor="#A7A7A7";
+        valider.setAttribute("disabled",true);
+    }
 }
 /**function activerBoutonValider(){
     modal.querySelector("#valider");
