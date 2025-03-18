@@ -380,6 +380,7 @@ input[type="submit"]{
 	width:75%;
 	text-align: center;
 	border-top: 1px solid #B3B3B3;
+	align-self: center;
 }
 #zone-ajout-photo{
 	background-color: #E8F1F6;
@@ -396,24 +397,14 @@ input[type="submit"]{
 #preview{
 	text-align: center;
 }
-#bouton-ajouter-photo{
-	display:flex;
-	flex-direction: column;
-	background-color: #CBD6DC;
-	border-radius: 50px;
-	border:none;
-	width:55%;
+#ajouter-photo{
 	height:50px;
-	text-align: center;
-	justify-content: center;
-	color:#306685;
 }
 .modal-wrapper form {
 	text-align: left;
 	display: flex;
 	flex-direction: column;
 	width:75%;
-	margin-bottom:40px;
 }
 .modal-wrapper form input {
 	height: 50px;
@@ -426,25 +417,22 @@ input[type="submit"]{
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	margin-bottom: 40px;
 }
 .modal-wrapper label {
 	margin: 1em 0 1em 0;
 }
+.modal-wrapper form .modal-footer{
+	width:100%;
+}
 #valider{
 	width:55%;
-	padding:10px;
-	border:none;
 	background-color:#A7A7A7;
 }
 .photo{
 	height:200px;
 }
-.disabled{
-	background-color:#A7A7A7;
-}
-.enabled{
-	background-color: #1D6154;
-}
+
 .invisible{
 	display:none;
 }

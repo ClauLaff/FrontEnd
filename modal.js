@@ -19,7 +19,7 @@ async function importerCategories(){
 const supprimer = async function(e){
     const id = e.target.dataset.id;
     const token = localStorage.getItem("1");
-    const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
+    await fetch(`http://localhost:5678/api/works/${id}`, {
         method:"DELETE",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -27,7 +27,6 @@ const supprimer = async function(e){
         }
     })
 }
-
 function activerBoutonsSuppression(){
     const bins = document.querySelectorAll(".bin");
     for(let i=0;i<bins.length;i++){
@@ -40,7 +39,6 @@ function desactiverBoutonsSuppresion(){
         bins[i].removeEventListener("click", supprimer)
     }
 }
-
 function activerBoutonAjouterPhoto(){
     const ajouterPhoto = modal.querySelector("#ajouter-photo");
     ajouterPhoto.addEventListener("click", affichageVue2)
@@ -49,7 +47,6 @@ function desactiverBoutonAjouterPhoto(){
     const ajouterPhoto = modal.querySelector("#ajouter-photo");
     ajouterPhoto.removeEventListener("click", affichageVue2)
 }
-
 function afficherVue1(){
     const wrapper = document.getElementById("modal-wrapper");
     wrapper.innerHTML=
@@ -80,11 +77,9 @@ export const affichageVue1 = function(){
     openModal();
 }
 
-
 const stopPropagation = function(e){
     e.stopPropagation();
 }
-
 const focusInModal = function(e){
     e.preventDefault();
     let index = focusables.findIndex(f=> f === vue.querySelector(":focus"))
@@ -101,7 +96,6 @@ const focusInModal = function(e){
     }
     focusables[index].focus();
 }
-
 window.addEventListener("keydown", function(e){
     if(e.key === "Escape" || e.key === "Esc"){
         closeModal(e)
@@ -133,6 +127,7 @@ const closeModal = function(){
         desactiverExplorateur();
         desactiverVerificationTitre();
         desactiverVerificationCategorie();
+        desactiverFormulaire();
     }
     focusables=[];
     modal.setAttribute("aria-hidden", true);
@@ -159,7 +154,7 @@ function afficherVue2(){
             <input type="image" src="assets/icons/xmark.png" alt="fermer modale" class="js-close-modal">
         </div>
         <h3 id = "title-modal" >Ajout photo</h3>
-        <form action="#" method="post">
+        <form action="#" method="post" id="formulaire-ajout-photo">
             <label for="explorateur" id="zone-ajout-photo">
                 <div>
                     <div id="informations-ajout-photo">
@@ -176,10 +171,10 @@ function afficherVue2(){
             <input type="text" name="title" id="title" required=true>
             <label for="category">Catégorie</label>
             <select name="category" id="category" required=true></select>
-        </form>  
-        <div class="modal-footer">
-            <input type="submit" value="Valider" id="valider" disabled >
-        </div>     
+            <div class="modal-footer">
+                <input type="submit" value="Valider" id="valider">
+            </div>
+        </form>     
     </div>`
     modal= document.getElementById("modal");
     const categorie = modal.querySelector("#category");
@@ -191,18 +186,16 @@ function afficherVue2(){
     activerExplorateur();
     activerVerificationTitre();
     activerVerificationCategorie();
+    activerFormulaire();
     vue2 = modal.querySelector("#vue2");
     vue = vue2;
     modal.classList.remove("invisible");
-      /**activerBoutonValider();*/
 }
-
 const affichageVue2 = function(){
     closeModal();
     afficherVue2();
     openModal();
 }
-
 function activerBoutonRetour(){
     const retour = modal.querySelector("#retour-vue1");
     retour.addEventListener("click", affichageVue1);
@@ -222,7 +215,10 @@ const affichagePhoto = function(e){
     photo.classList.add("photo");
     photo.src = window.URL.createObjectURL(photos[0]); 
     preview.appendChild(photo);
-    verifierFormulaire(); 
+    const titre = photos[0].name;
+    const title = modal.querySelector("#title");
+    title.value = titre;
+    verifierFormulaire();
 }
 function activerExplorateur(){
     const explorateur = modal.querySelector("#explorateur");
@@ -266,13 +262,54 @@ function verifierFormulaire(){
     if ( photos.length !== 0 && titre !== "" && categorie !== ""){
        const valider = modal.querySelector("#valider");
         valider.style.backgroundColor="#1D6154";
-        valider.setAttribute("disabled",false); 
+        
     }else{
         const valider = modal.querySelector("#valider");
         valider.style.backgroundColor="#A7A7A7";
-        valider.setAttribute("disabled",true);
+        
     }
 }
-/**function activerBoutonValider(){
-    modal.querySelector("#valider");
-}*/
+const ajouter = (e)=>{
+    e.preventDefault();
+    const explorateur = modal.querySelector("#explorateur");
+    const photos = explorateur.files;
+    const urlPhoto = window.URL.createObjectURL(photos[0]);
+    console.log(urlPhoto)
+    const title = modal.querySelector("#title");
+    const titre = title.value;
+    console.log(titre)
+    const category = modal.querySelector("#category");
+    const categorie = category.value;
+    let idCategorie = null;
+    for (let i=0;i<categories.length;i++){
+        if (categories[i].name === categorie){
+            idCategorie = categories[i].id;
+        }
+    }
+    console.log(idCategorie)
+    const body = { id: 0, title: titre, imageUrl: urlPhoto,  categoryId: idCategorie, userId: 1, category:{id: idCategorie, name: categorie}};
+    const chargeUtile = JSON.stringify(body);
+    console.log(chargeUtile);
+    requeteAjoutPhoto(chargeUtile);
+    
+}
+async function requeteAjoutPhoto(chargeUtile){
+    const token = localStorage.getItem("1");
+    await fetch("http://localhost:5678/api/works", {
+        method:"POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type":"application/json"
+        },
+        body: chargeUtile
+    })
+    console.log("ajouté")
+}
+function activerFormulaire(){
+    const formulaire = modal.querySelector("#formulaire-ajout-photo");
+    formulaire.addEventListener("submit", ajouter);
+}
+function desactiverFormulaire(){
+    const formulaire = modal.querySelector("#formulaire-ajout-photo");
+    formulaire.removeEventListener("submit", ajouter);
+}
