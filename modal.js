@@ -7,6 +7,7 @@ let focusables = [];
 const travaux = await importerTravaux();
 const categories = await importerCategories();
 
+
 async function importerTravaux(){
     const reponse = await fetch("http://localhost:5678/api/works");
     return await reponse.json();
@@ -15,6 +16,8 @@ async function importerCategories(){
     const reponse = await fetch ("http://localhost:5678/api/categories");
     return await reponse.json();
 }
+
+/**Vue 1 */
 
 const supprimer = async function(e){
     const id = e.target.dataset.id;
@@ -104,45 +107,7 @@ window.addEventListener("keydown", function(e){
     }
 })
 
-const openModal = function(){
-    focusables = Array.from (vue.querySelectorAll(focusableSelector));
-    focusables[0].focus();
-    modal.setAttribute("aria-hidden",false);
-    modal.setAttribute("aria-modal",true);
-    modal.addEventListener("click", closeModal);
-    modal.querySelector(".js-close-modal").addEventListener("click",closeModal);
-    modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation); 
-}
-
-const closeModal = function(){
-    if (modal === null) return;
-    modal.classList.add("invisible");
-    if (vue === vue1){
-        const galerieModale = document.getElementById("galerie-modale");
-        galerieModale.innerHTML =``;
-        desactiverBoutonsSuppresion();
-        desactiverBoutonAjouterPhoto();
-    }else{
-        desactiverBoutonRetour();
-        desactiverExplorateur();
-        desactiverVerificationTitre();
-        desactiverVerificationCategorie();
-        desactiverFormulaire();
-    }
-    focusables=[];
-    modal.setAttribute("aria-hidden", true);
-    modal.setAttribute("aria-modal",false);
-    modal.removeEventListener("click", closeModal);
-    modal.querySelector(".js-close-modal").removeEventListener("click", closeModal);
-    modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
-    modal.querySelector("#modal-wrapper").innerHTML=``;
-    modal = null;
-}
-
-export function creerModale(){
-    document.querySelector(".js-modal").addEventListener("click", affichageVue1);
-    console.log("Modale créée");
-}
+/** Vue 2 */
 
 function afficherVue2(){
     closeModal();
@@ -269,11 +234,12 @@ function verifierFormulaire(){
         
     }
 }
-const ajouter = (e)=>{
+const ajouter = async (e)=>{
     e.preventDefault();
     const explorateur = modal.querySelector("#explorateur");
     const photos = explorateur.files;
-    const urlPhoto = window.URL.createObjectURL(photos[0]);
+    const photo = photos[0];
+    const urlPhoto = window.URL.createObjectURL(photo);
     console.log(urlPhoto)
     const title = modal.querySelector("#title");
     const titre = title.value;
@@ -286,22 +252,24 @@ const ajouter = (e)=>{
             idCategorie = categories[i].id;
         }
     }
-    console.log(idCategorie)
-    const body = { id: 0, title: titre, imageUrl: urlPhoto,  categoryId: idCategorie, userId: 1, category:{id: idCategorie, name: categorie}};
-    const chargeUtile = JSON.stringify(body);
-    console.log(chargeUtile);
-    requeteAjoutPhoto(chargeUtile);
+    const formData = new FormData();
+    formData.append("title", titre);
+    formData.append("image", photo);
+    formData.append("category", idCategorie);
+    console.log(formData);
+
+    requeteAjoutPhoto(formData);
     
 }
-async function requeteAjoutPhoto(chargeUtile){
+
+async function requeteAjoutPhoto(formData){
     const token = localStorage.getItem("1");
     await fetch("http://localhost:5678/api/works", {
         method:"POST",
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type":"application/json"
+            "Authorization": `Bearer ${token}`,  
         },
-        body: chargeUtile
+        body: formData
     })
     console.log("ajouté")
 }
@@ -313,3 +281,46 @@ function desactiverFormulaire(){
     const formulaire = modal.querySelector("#formulaire-ajout-photo");
     formulaire.removeEventListener("submit", ajouter);
 }
+
+/** Création, ouvrir et fermer modale */
+
+const openModal = function(){
+    focusables = Array.from (vue.querySelectorAll(focusableSelector));
+    focusables[0].focus();
+    modal.setAttribute("aria-hidden",false);
+    modal.setAttribute("aria-modal",true);
+    modal.addEventListener("click", closeModal);
+    modal.querySelector(".js-close-modal").addEventListener("click",closeModal);
+    modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation); 
+}
+
+const closeModal = function(){
+    if (modal === null) return;
+    modal.classList.add("invisible");
+    if (vue === vue1){
+        const galerieModale = document.getElementById("galerie-modale");
+        galerieModale.innerHTML =``;
+        desactiverBoutonsSuppresion();
+        desactiverBoutonAjouterPhoto();
+    }else{
+        desactiverBoutonRetour();
+        desactiverExplorateur();
+        desactiverVerificationTitre();
+        desactiverVerificationCategorie();
+        desactiverFormulaire();
+    }
+    focusables=[];
+    modal.setAttribute("aria-hidden", true);
+    modal.setAttribute("aria-modal",false);
+    modal.removeEventListener("click", closeModal);
+    modal.querySelector(".js-close-modal").removeEventListener("click", closeModal);
+    modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
+    modal.querySelector("#modal-wrapper").innerHTML=``;
+    modal = null;
+}
+
+export function creerModale(){
+    document.querySelector(".js-modal").addEventListener("click", affichageVue1);
+    console.log("Modale créée");
+}
+
