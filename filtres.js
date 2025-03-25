@@ -1,12 +1,28 @@
 import {afficherTousTravaux, importerTravaux}from "./index.js";
 
-const categories = await importerCategories();
-const travaux = await importerTravaux();
+const categories = JSON.parse(localStorage.getItem("listeCategories"));
+const travaux = JSON.parse(localStorage.getItem("listeTravaux"));
 
-/**Importation des catégories depuis l'API, renvoie la liste des catégories */
+/**Importation des catégories depuis l'API, enregistre la liste des catégories dans le local strorage */
 async function importerCategories(){
     const reponse = await fetch ("http://localhost:5678/api/categories");
-    return await reponse.json();
+    const result = await reponse.json();
+    const list = JSON.stringify(result);
+    localStorage.setItem("listeCategories", `${list}`);
+}
+
+function effacerGalerie(){
+    const galerie = document.getElementById("galerie");
+    galerie.innerHTML="";
+}
+
+async function afficherTravauxFiltres(id){
+   const travauxFiltres = travaux.filter(function(work){
+       return work.categoryId==id;
+   });
+    for(let i=travauxFiltres.length-1;i>=0;i--){
+        galerie.innerHTML+=`<figure><img src="${travauxFiltres[i].imageUrl}" alt="${travauxFiltres[i].title}"><figcaption>${travauxFiltres[i].title}</figcaption></figure>`;
+   } 
 }
 
 /**Création et activation des filtres à partir des catégories importées depuis l'API*/
@@ -46,17 +62,6 @@ export async function creerFiltres(){
     }
  }
 
- function effacerGalerie(){
-     const galerie = document.getElementById("galerie");
-     galerie.innerHTML="";
- }
- 
- async function afficherTravauxFiltres(id){
-    const travauxFiltres = travaux.filter(function(work){
-        return work.categoryId==id;
-    });
-     for(let i=travauxFiltres.length-1;i>=0;i--){
-         galerie.innerHTML+=`<figure><img src="${travauxFiltres[i].imageUrl}" alt="${travauxFiltres[i].title}"><figcaption>${travauxFiltres[i].title}</figcaption></figure>`;
-    } 
- }
- 
+ if(categories === null || categories === undefined){
+    importerCategories()
+}

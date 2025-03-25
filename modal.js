@@ -1,34 +1,33 @@
+import { importerTravaux } from "./index.js";
+
 let modal = null;
 let vue1 = null;
 let vue2 = null;
 let vue = null;
 const focusableSelector="button, a, input, textarea";
 let focusables = [];
-const travaux = await importerTravaux();
-const categories = await importerCategories();
-
-
-async function importerTravaux(){
-    const reponse = await fetch("http://localhost:5678/api/works");
-    return await reponse.json();
-}
-async function importerCategories(){
-    const reponse = await fetch ("http://localhost:5678/api/categories");
-    return await reponse.json();
-}
+const travaux = JSON.parse(localStorage.getItem("listeTravaux"));
+const categories = JSON.parse(localStorage.getItem("listeCategories"));
 
 /**Vue 1 */
 
 const supprimer = async function(e){
-    const id = e.target.dataset.id;
-    const token = localStorage.getItem("1");
-    await fetch(`http://localhost:5678/api/works/${id}`, {
-        method:"DELETE",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type":"application/json"
+    try{
+        const id = e.target.dataset.id;
+        const token = localStorage.getItem("1");
+        const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+            method:"DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type":"application/json"
+            }
+        })
+        if(response.ok){
+            importerTravaux();
         }
-    })
+    }catch(error){
+        console.error("La suppression n'a pu être finalisée", error.message)
+    }  
 }
 function activerBoutonsSuppression(){
     const bins = document.querySelectorAll(".bin");
@@ -240,10 +239,8 @@ const ajouter = async (e)=>{
     const photos = explorateur.files;
     const photo = photos[0];
     const urlPhoto = window.URL.createObjectURL(photo);
-    console.log(urlPhoto)
     const title = modal.querySelector("#title");
     const titre = title.value;
-    console.log(titre)
     const category = modal.querySelector("#category");
     const categorie = category.value;
     let idCategorie = null;
@@ -256,22 +253,25 @@ const ajouter = async (e)=>{
     formData.append("title", titre);
     formData.append("image", photo);
     formData.append("category", idCategorie);
-    console.log(formData);
-
     requeteAjoutPhoto(formData);
-    
 }
 
 async function requeteAjoutPhoto(formData){
-    const token = localStorage.getItem("1");
-    await fetch("http://localhost:5678/api/works", {
-        method:"POST",
-        headers: {
-            "Authorization": `Bearer ${token}`,  
-        },
-        body: formData
-    })
-    console.log("ajouté")
+    try{
+        const token = localStorage.getItem("1");
+        const response = await fetch("http://localhost:5678/api/works", {
+            method:"POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,  
+            },
+            body: formData
+        })
+        if (response.ok){
+            importerTravaux();
+        } 
+    }catch(error){
+        console.error("L'ajout n'a pu être finalisé", error.message)
+    }
 }
 function activerFormulaire(){
     const formulaire = modal.querySelector("#formulaire-ajout-photo");

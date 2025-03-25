@@ -1,18 +1,15 @@
 import {creerFiltres} from "./filtres.js";
 import {creerModale} from "./modal.js";
 
-const travaux = await importerTravaux();
+const travaux = JSON.parse(localStorage.getItem("listeTravaux"));
 
-afficherTousTravaux();
-creerFiltres();
-gererAffichageModeEdition();
-activerLogInOut();
-creerModale();
 
-/**Importation des travaux depuis l'API, retourne la liste des travaux*/
-export async function importerTravaux(){
+/**Importation des travaux depuis l'API, enregistre la liste des travaux dans le localStorage*/
+export async function importerTravaux(){ 
     const reponse = await fetch("http://localhost:5678/api/works");
-    return await reponse.json();;
+    const result =  await reponse.json();
+    const list = JSON.stringify(result);
+    localStorage.setItem("listeTravaux", `${list}`);
 }
 
 /**Affichage de tous les travaux dans la galerie*/
@@ -57,3 +54,12 @@ function gererAffichageModeEdition(){
         }
     })
  }
+
+if (travaux === null || travaux === undefined){
+    importerTravaux()
+}
+afficherTousTravaux();
+creerFiltres();
+gererAffichageModeEdition();
+activerLogInOut();
+creerModale();
