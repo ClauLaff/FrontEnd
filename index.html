@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="./assets/style.css">	
 </head>
 <body>
-	<div id="bandeauEdition" class="invisible"><img src="assets/icons/edition(blanc).png" alt="edition" title="edition">Mode édition</div>
+	<div id="edition-banner" class="invisible"><img src="assets/icons/edition(blanc).png" alt="edition" title="edition">Mode édition</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
@@ -37,12 +37,49 @@
 	</div>
 	<section id="portfolio">
 		<header><h2>Mes Projets</h2><a id="modifier" href="#modal"  class="js-modal invisible"><img src="assets/icons/edition(noir).png" alt="edition">modifier</a></header>
-		<aside id="modal" class="modal invisible"  aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title-modal">
+		<aside id="modal" class="modal"  aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title-modal">
 			<div id="modal-wrapper" class="modal-wrapper js-modal-stop">
+				<div id="view1" >
+					<div class="modal-header">
+						<input type="image" src="assets/icons/xmark.png" alt="fermer-modale" class="js-close-modal">
+					</div>
+					<h3 id="modal-title">Galerie photo</h3>
+					<div id="modal-gallery" class="modal-gallery"></div>
+					<div class="modal-footer">
+						<button  id="ajouter-photo" >Ajouter une photo</button>
+					</div>
+				</div>
+				<div id="view2">
+					<div class="modal-header">
+						<input type="image" src="assets/icons/backward.png" alt="retour galerie photo" id="back-to-view1">
+						<input type="image" src="assets/icons/xmark.png" alt="fermer modale" class="js-close-modal">
+					</div>
+					<h3 id = "modal-title" >Ajout photo</h3>
+					<form action="#" method="post" id="ajout-photo-form">	
+						<label for="explorer" id="ajout-photo-label">
+							<div>
+								<div id="ajout-photo-infos">
+									<img src="assets/icons/jpg.png" alt="jpg">
+									<label for="explorer" id="ajouter-photo-button">+ Ajouter photo</label>
+									<p>jpg, png : 4mo max</p>
+								</div>
+								<div id="preview"></div>
+							</div>
+							<input type="file" id="explorer" accept=".jpg, .png" multiple=false>   
+						</label>
+						<label for="title">Titre</label>
+						<input type="text" name="title" id="title" required=true>
+						<label for="category">Catégorie</label>
+						<select name="category" id="category" required=true></select>
+						<div class="modal-footer">
+							<input type="submit" value="Valider" id="valider">
+						</div>
+					</form>
+				</div>
 			</div>
 		</aside>
-		<div id="barreFiltres"></div>
-		<div id="galerie" class="gallery"></div>
+		<div id="filtersBar"></div>
+		<div id="gallery" class="gallery"></div>
 	</section>
 	<section id="contact">
 		<h2>Contact</h2>

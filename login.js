@@ -1,63 +1,62 @@
-activerFormulaire();
+connectionFormOn();
 
 /**Vérificatin des champs: 
  * si champ vide envoie un signal visuel
- * ou renvoie la valeur du champ saisie */
-function verificationSaisie(idChamp){
-    let champ = document.getElementById(`${idChamp}`);
-    let champTrim = champ.value.trim();
-    if(champTrim === ""){
-        champ.classList.add(undefined);
-        champ.addEventListener("change",()=>{
-            champ.classList.remove(undefined);
-            const balise = document.getElementById("message-connexion");
-            balise.innerHTML = "";
+ * renvoie la valeur du champ saisie */
+function checkField(fieldId){
+    let field = document.getElementById(`${fieldId}`);
+    let fieldTrim = field.value.trim();
+    if(fieldTrim === ""){
+        field.classList.add(undefined);
+        field.addEventListener("change",()=>{
+            field.classList.remove(undefined);
+            const element = document.getElementById("connection-message");
+            element.innerHTML = "";
         })
     }
-    else{return champTrim}
+    else{return fieldTrim}
 }
 
 /**Envoi des champs saisis avec POST: 
- * si connexion réussie: enregistre le token dans le local storage;
- * si échec connexion: affiche le code et le descriptif*/
-async function requeteLogin(chargeUtile){
+ * si connexion réussie: enregistre le token dans le local storage et redirige vers la page d'accueil;
+ * si échec connexion: affiche le code et le message*/
+async function loginRequest(chargeUtile){
    try{
-        const reponse = await fetch ("http://localhost:5678/api/users/login",{
+        const response = await fetch ("http://localhost:5678/api/users/login",{
             method:"POST",
             headers:{"Content-type":"application/json"},
             body: chargeUtile
         });
-        if (reponse.ok){
-            const message = reponse.status + ": " + reponse.statusText;
-            const resultat = await reponse.json();
-            const userId = resultat.userId;
-            const token = resultat.token;
+        if (response.ok){
+            const message = response.status + ": " + response.statusText;
+            const result = await response.json();
+            const userId = result.userId;
+            const token = result.token;
             localStorage.setItem(`${userId}`, `${token}`);
             location.href="index.html";
         }else{
-            const message = reponse.status + ": " + reponse.statusText;
-            const balise = document.getElementById("message-connexion");
-            balise.innerHTML = message;
+            const message = response.status + ": " + response.statusText;
+            const element = document.getElementById("connection-message");
+            element.innerHTML = message;
         }
     }catch(error){
-        console.error("La connexion a échoué", error.message)
+        element.innerHTML= "La connexion a échoué" + error.message;
     }
 }
 
 /**Activation du formulaire de login : activation du bouton "Se connecter":
  * au click envoie les données du formulaire à l'API pour connexion, 
- * si connxion réussie, enregistre le token dans le local storage,
-* renvoie true ou false selon réussite ou échec de connexion*/
-function activerFormulaire(){
-    const formulaireLogin = document.querySelector("#login form");
-    formulaireLogin.addEventListener ("submit", (event)=>{
+ * si connxion réussie, enregistre le token dans le local storage,*/
+function connectionFormOn(){
+    const loginForm = document.querySelector("#login form");
+    loginForm.addEventListener ("submit", (event)=>{
         event.preventDefault();
-        const email = verificationSaisie("email");
-        const password = verificationSaisie("password");
+        const email = checkField("email");
+        const password = checkField("password");
         if (email!== undefined & password !== undefined){
             const loginDetails = { email: email, password : password};
             const chargeUtile = JSON.stringify(loginDetails);
-            requeteLogin(chargeUtile);
+            loginRequest(chargeUtile);
         }
     })
 }
